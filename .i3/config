@@ -1,0 +1,224 @@
+################################# Requirements #################################
+#
+# feh
+#   Background Manager
+# compton
+#   Composite Manager
+#   Blurred transparent backgrounds
+#   Fading
+# gnome-screensaver
+#   Screensaver Locking
+# xbacklight
+#   backlight control
+# FontAwesome font
+
+################################### Utility ####################################
+
+font pango:Liberation Mono, FontAwesome 10
+
+# Super / Cmd / "Windows Key"
+set $mod Mod4
+
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
+
+################################### Display ####################################
+
+# Drag floating windows by holding Super and dragging
+floating_modifier $mod
+
+new_window pixel 1
+new_float pixel 1
+
+# If window is alone on workspace, hide border
+hide_edge_borders smart
+
+# Class,                Border, BG,     Text,   Indcat, Child Border
+client.focused          #6193CF #2C72C7 #EEEEEC #E20800 #0057AE
+client.focused_inactive #BABDB6 #888A85 #EEEEEC #E20800 #555753
+client.unfocused        #555753 #2E3436 #BABDB6 #E20800 #2E3436
+client.urgent           #F2BB88 #F29B68 #EEEEEC #E20800 #EC7331
+client.background       #2E3436
+
+################################# Keybindings ##################################
+
+bindsym  $mod+Up     focus up
+bindsym  $mod+Right  focus right
+bindsym  $mod+Left   focus left
+bindsym  $mod+Down   focus down
+
+bindsym  $mod+Shift+Up     move up
+bindsym  $mod+Shift+Right  move right
+bindsym  $mod+Shift+Left   move left
+bindsym  $mod+Shift+Down   move down
+
+bindsym  $mod+Control+Up     focus parent
+bindsym  $mod+Control+Right  focus right
+bindsym  $mod+Control+Left   focus left
+bindsym  $mod+Control+Down   focus child
+
+bindsym  $mod+1   workspace $ws1
+bindsym  $mod+2   workspace $ws2
+bindsym  $mod+3   workspace $ws3
+bindsym  $mod+4   workspace $ws4
+bindsym  $mod+5   workspace $ws5
+bindsym  $mod+6   workspace $ws6
+bindsym  $mod+7   workspace $ws7
+bindsym  $mod+8   workspace $ws8
+bindsym  $mod+9   workspace $ws9
+bindsym  $mod+10  workspace $ws10
+
+bindsym  $mod+Shift+1   move container to workspace $ws1
+bindsym  $mod+Shift+2   move container to workspace $ws2
+bindsym  $mod+Shift+3   move container to workspace $ws3
+bindsym  $mod+Shift+4   move container to workspace $ws4
+bindsym  $mod+Shift+5   move container to workspace $ws5
+bindsym  $mod+Shift+6   move container to workspace $ws6
+bindsym  $mod+Shift+7   move container to workspace $ws7
+bindsym  $mod+Shift+8   move container to workspace $ws8
+bindsym  $mod+Shift+9   move container to workspace $ws9
+bindsym  $mod+Shift+10  move container to workspace $ws10
+
+################## Layout Keys ###################
+
+bindsym  $mod+e        layout toggle split
+bindsym  $mod+f        fullscreen
+bindsym  $mod+Shift+f  floating toggle
+bindsym  $mod+g        split h
+bindsym  $mod+q        kill
+bindsym  $mod+Shift+r  restart
+bindsym  $mod+s        layout stacking
+bindsym  $mod+v        split v
+bindsym  $mod+w        layout tabbed
+
+################### Media Keys ###################
+
+bindsym  XF86MonBrightnessUp    exec --no-startup-id xbacklight -inc 5 -time 20
+bindsym  XF86MonBrightnessDown  exec --no-startup-id xbacklight -dec 5 -time 20
+bindsym  XF86AudioRaiseVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 +5%
+bindsym  XF86AudioLowerVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 -5%
+bindsym  XF86AudioMute          exec --no-startup-id pactl se-sink-mute 0 toggle
+
+################## Custom Keys ###################
+
+bindsym  $mod+Return      exec i3-sensible-terminal
+bindsym  $mod+Space       exec --no-startup-id dmenu_run -i -l 10
+bindsym  $mod+d           exec --no-startup-id i3-dmenu-desktop --dmenu="dmenu -i -l 10"
+bindsym  $mod+l           exec gnome-screensaver-command -l
+bindsym  $mod+n           exec nautilus --no-desktop
+bindsym  $mod+Shift+n     exec i3-input -F 'exec nautilus --no-desktop %s' -P 'Nautilus: '
+bindsym  $mod+numbersign  exec i3-sensible-terminal -e "vim -c ':VimwikiIndex'"
+bindsym  $mod+y           fullscreen disable; floating enable; resize set 600 400; sticky enable; move window to position 1300 660
+
+#################### Browsers ####################
+
+bindsym $mod+b exec vivaldi
+bindsym $mod+Shift+b exec vivaldi --incognito
+
+set $browser_menu "BROWSER:     𝔽irefox   ℂhromium:   𝕄essenger 𝕊team 𝔻iscord"
+bindsym $mod+Ctrl+b mode $browser_menu
+
+mode $browser_menu {
+	bindsym f exec firefox; mode default
+	bindsym Shift+f exec firefox --private; mode default
+	bindsym $mod+f exec firefox; mode default
+	bindsym $mod+Shift+f exec firefox --private; mode default
+
+	bindsym c exec chromium-browser; mode default
+	bindsym Shift+c exec chromium-browser --incognito; mode default
+	bindsym $mod+c exec chromium-browser; mode default
+	bindsym $mod+Shift+c exec chromium-browser --incognito; mode default
+
+	bindsym m exec chromium-browser --profile-directory="Profile 2" https://messenger.com; mode default
+	bindsym s exec chromium-browser --profile-directory="Profile 1" https://steamcommunity.com/chat; mode default
+	bindsym d exec chromium-browser --profile-directory="Profile 3" https://discordapp.com/channels/@me; mode default
+
+	bindsym Return mode default
+	bindsym Escape mode default
+}
+
+#################### Resizing ####################
+
+set $resize_menu "RESIZING:     [◀]Shrink [▶]Grow   [▼]Shrink [▲]Grow"
+bindsym $mod+r mode $resize_menu
+
+mode $resize_menu {
+	bindsym Up resize grow height 10 px or 10 ppt
+	bindsym Right resize grow width 10 px or 10 ppt
+	bindsym Down resize shrink height 10 px or 10 ppt
+	bindsym Left resize shrink width 10 px or 10 ppt
+
+	bindsym Shift+Up resize grow height 1 px or 1 ppt
+	bindsym Shift+Right resize grow width 1 px or 1 ppt
+	bindsym Shift+Down resize shrink height 1 px or 1 ppt
+	bindsym Shift+Left resize shrink width 1 px or 1 ppt
+
+	bindsym Return mode default
+	bindsym Escape mode default
+}
+
+################### Power Menu ###################
+
+set $power_menu "POWER:     𝕊uspend   𝕃ogout   ℝeboot   ℙower off"
+bindsym $mod+Shift+e mode $power_menu
+
+mode $power_menu {
+	bindsym l exit
+	bindsym s exec systemctl suspend
+	bindsym r exec systemctl reboot
+	bindsym p exec systemctl poweroff
+
+	bindsym Return mode default
+	bindsym Escape mode default
+}
+
+
+################ Brightness Menu #################
+
+set $brightness_menu "BRIGHTNESS:     1-10 Steps   ▲ Increase   ▼ Decrease   Space Input"
+bindsym $mod+Shift+l mode $brightness_menu
+
+mode $brightness_menu {
+	bindsym 1 exec --no-startup-id xbacklight -set 10%; mode default
+	bindsym 2 exec --no-startup-id xbacklight -set 20%; mode default
+	bindsym 3 exec --no-startup-id xbacklight -set 30%; mode default
+	bindsym 4 exec --no-startup-id xbacklight -set 40%; mode default
+	bindsym 5 exec --no-startup-id xbacklight -set 50%; mode default
+	bindsym 6 exec --no-startup-id xbacklight -set 60%; mode default
+	bindsym 7 exec --no-startup-id xbacklight -set 70%; mode default
+	bindsym 8 exec --no-startup-id xbacklight -set 80%; mode default
+	bindsym 9 exec --no-startup-id xbacklight -set 90%; mode default
+	bindsym 10 exec --no-startup-id xbacklight -set 100%; mode default
+
+	bindsym Up exec --no-startup-id xbacklight + 5%
+	bindsym Down exec --no-startup-id xbacklight - 5%
+
+	bindsym Space exec i3-input -F 'exec xbacklight -set %s%' -P 'Backlight: '; mode default
+
+	bindsym Return mode default
+	bindsym Escape mode default
+}
+
+################################## Status Bar ##################################
+
+bar {
+	status_command i3status -c $HOME/.i3/i3status.conf | $HOME/.i3/i3status_wrapper.py
+	font pango:Liberation Mono, FontAwesome 10
+
+	position top
+}
+
+############################## Startup Processes ###############################
+
+exec --no-startup-id compton -b --config $HOME/.i3/compton.conf
+exec_always --no-startup-id feh --bg-fill $HOME/.i3/bg.png
+exec --no-startup-id /usr/bin/gnome-settings-daemon
+exec --no-startup-id nm-applet

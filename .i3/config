@@ -105,18 +105,19 @@ bindsym  XF86MonBrightnessUp    exec --no-startup-id xbacklight -inc 5 -time 20
 bindsym  XF86MonBrightnessDown  exec --no-startup-id xbacklight -dec 5 -time 20
 bindsym  XF86AudioRaiseVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 +5%
 bindsym  XF86AudioLowerVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 -5%
-bindsym  XF86AudioMute          exec --no-startup-id pactl se-sink-mute 0 toggle
+bindsym  XF86AudioMute          exec --no-startup-id pactl set-sink-mute 0 toggle
 
 ################## Custom Keys ###################
 
 bindsym  $mod+Return      exec i3-sensible-terminal
-bindsym  $mod+Space       exec --no-startup-id dmenu_run -i -l 10
+bindsym  $mod+space       exec --no-startup-id dmenu_run -i -l 10
 bindsym  $mod+d           exec --no-startup-id i3-dmenu-desktop --dmenu="dmenu -i -l 10"
 bindsym  $mod+l           exec gnome-screensaver-command -l
 bindsym  $mod+n           exec nautilus --no-desktop
 bindsym  $mod+Shift+n     exec i3-input -F 'exec nautilus --no-desktop %s' -P 'Nautilus: '
 bindsym  $mod+numbersign  exec i3-sensible-terminal -e "vim -c ':VimwikiIndex'"
-bindsym  $mod+y           fullscreen disable; floating enable; resize set 600 400; sticky enable; move window to position 1300 660
+bindsym  $mod+y           exec --no-startup-id $HOME/.i3/scripts/window_formats.sh
+bindsym  $mod+grave       scratchpad show
 
 #################### Browsers ####################
 
@@ -183,7 +184,7 @@ mode $power_menu {
 
 ################ Brightness Menu #################
 
-set $brightness_menu "BRIGHTNESS:     1-10 Steps   ▲ Increase   ▼ Decrease   Space Input"
+set $brightness_menu "BRIGHTNESS:     1-0 Steps   ▲ Increase   ▼ Decrease   i Input"
 bindsym $mod+Shift+l mode $brightness_menu
 
 mode $brightness_menu {
@@ -196,12 +197,12 @@ mode $brightness_menu {
 	bindsym 7 exec --no-startup-id xbacklight -set 70%; mode default
 	bindsym 8 exec --no-startup-id xbacklight -set 80%; mode default
 	bindsym 9 exec --no-startup-id xbacklight -set 90%; mode default
-	bindsym 10 exec --no-startup-id xbacklight -set 100%; mode default
+	bindsym 0 exec --no-startup-id xbacklight -set 100%; mode default
 
 	bindsym Up exec --no-startup-id xbacklight + 5%
 	bindsym Down exec --no-startup-id xbacklight - 5%
 
-	bindsym Space exec i3-input -F 'exec xbacklight -set %s%' -P 'Backlight: '; mode default
+	bindsym i exec i3-input -F 'exec xbacklight -set %s%' -P 'Backlight: '; mode default
 
 	bindsym Return mode default
 	bindsym Escape mode default

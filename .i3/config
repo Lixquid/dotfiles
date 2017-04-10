@@ -11,6 +11,8 @@
 # xbacklight
 #   backlight control
 # FontAwesome font
+# i3-gaps
+# i3blocks-gaps
 
 ################################### Utility ####################################
 
@@ -101,11 +103,13 @@ bindsym  $mod+w        layout tabbed
 
 ################### Media Keys ###################
 
-bindsym  XF86MonBrightnessUp    exec --no-startup-id xbacklight -inc 5 -time 20
-bindsym  XF86MonBrightnessDown  exec --no-startup-id xbacklight -dec 5 -time 20
-bindsym  XF86AudioRaiseVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 +5%
-bindsym  XF86AudioLowerVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 -5%
-bindsym  XF86AudioMute          exec --no-startup-id pactl set-sink-mute 0 toggle
+bindsym  XF86MonBrightnessUp    exec --no-startup-id xbacklight -inc 5 -time 20; exec --no-startup-id pkill -RTMIN+2 i3blocks
+bindsym  XF86MonBrightnessDown  exec --no-startup-id xbacklight -dec 5 -time 20; exec --no-startup-id pkill -RTMIN+2 i3blocks
+bindsym  XF86AudioRaiseVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 +5%; exec --no-startup-id pkill -RTMIN+1 i3blocks
+bindsym  XF86AudioLowerVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 -5%; exec --no-startup-id pkill -RTMIN+1 i3blocks
+bindsym  XF86AudioMute          exec --no-startup-id pactl set-sink-mute 0 toggle; exec --no-startup-id pkill -RTMIN+1 i3blocks
+
+bindsym --release Print exec --no-startup-id scrot
 
 ################## Custom Keys ###################
 
@@ -210,11 +214,30 @@ mode $brightness_menu {
 
 ################################## Status Bar ##################################
 
+set $cts    #000000a0
+set $cwhite #EEEEEC
+set $cblue  #6193CF
+set $cred   #F29B68
+
 bar {
-	status_command i3status -c $HOME/.i3/i3status.conf | $HOME/.i3/i3status_wrapper.py
+	i3bar_command i3bar -t
+	# status_command i3status -c $HOME/.i3/i3status.conf | $HOME/.i3/i3status_wrapper.py
+	status_command i3blocks -c $HOME/.i3/i3blocks.conf
 	font pango:Liberation Mono, FontAwesome 10
 
 	position top
+	height 24
+
+	colors {
+		background $cts
+
+		# Class,                Border, BG,     Text
+		focused_workspace       $cts    $cts    $cblue
+		inactive_workspace      $cts    $cts    $cwhite
+		active_workspace        $cts    $cts    $cwhite
+		urgent_workspace        $cts    $cred   $cwhite
+		binding_mode            $cts    $cred   $cwhite
+	}
 }
 
 ############################## Startup Processes ###############################

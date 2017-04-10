@@ -25,16 +25,25 @@ case $SEL in
 		"
 		;;
 	"Spotify")
+		# i3-msg "
+			# mark spotify;
+			# fullscreen disable;
+			# floating enable;
+			# resize set 200 410;
+			# sticky enable;
+			# move position
+				# $(( $SWIDTH - 20 - 200 ))
+				# $(( $SHEIGHT - 20 - 410 ));
+		# "
 		i3-msg "
 			mark spotify;
 			fullscreen disable;
 			floating enable;
-			resize set 200 410;
+			resize set 735 90;
 			sticky enable;
-			move position 1700 650;
 			move position
-				$(( $SWIDTH - 20 - 200 ))
-				$(( $SHEIGHT - 20 - 410 ));
+				$(( $SWIDTH - 20 - 735 ))
+				$(( 24 + 20 ));
 		"
 		;;
 	"Quick Terminal")

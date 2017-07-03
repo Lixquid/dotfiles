@@ -109,6 +109,10 @@ bindsym  XF86AudioRaiseVolume   exec --no-startup-id pactl set-sink-mute 0 0; ex
 bindsym  XF86AudioLowerVolume   exec --no-startup-id pactl set-sink-mute 0 0; exec --no-startup-id pactl set-sink-volume 0 -5%; exec --no-startup-id pkill -RTMIN+1 i3blocks
 bindsym  XF86AudioMute          exec --no-startup-id pactl set-sink-mute 0 toggle; exec --no-startup-id pkill -RTMIN+1 i3blocks
 
+bindsym  XF86AudioPlay  exec --no-startup-id $HOME/.i3/scripts/audio_control.sh PlayPause; exec --no-startup-id pkill -RTMIN+3 i3blocks
+bindsym  XF86AudioNext  exec --no-startup-id $HOME/.i3/scripts/audio_control.sh Next; exec --no-startup-id pkill -RTMIN+3 i3blocks
+bindsym  XF86AudioPrev  exec --no-startup-id $HOME/.i3/scripts/audio_control.sh Previous; exec --no-startup-id pkill -RTMIN+3 i3blocks
+
 bindsym --release Print exec --no-startup-id scrot
 
 ################## Custom Keys ###################
@@ -123,32 +127,30 @@ bindsym  $mod+numbersign  exec i3-sensible-terminal -e "vim -c ':VimwikiIndex'"
 bindsym  $mod+y           exec --no-startup-id $HOME/.i3/scripts/window_formats.sh
 bindsym  $mod+grave       scratchpad show
 
+bindsym  $mod+Ctrl+Alt+b  exec --no-startup-id $HOME/.i3/scripts/random_bg.sh
+
 #################### Browsers ####################
 
-bindsym $mod+b exec vivaldi
-bindsym $mod+Shift+b exec vivaldi --incognito
+bindsym $mod+b exec chromium-browser --profile-directory="Default"
+bindsym $mod+Shift+b exec chromium-browser --incognito --profile-directory="Default"
 
-set $browser_menu "BROWSER:     𝔽irefox   ℂhromium:   𝕄essenger 𝕊team 𝔻iscord"
-bindsym $mod+Ctrl+b mode $browser_menu
+# set $browser_menu "BROWSER:     𝔽irefox   ℂhromium:   𝕄essenger 𝕊team 𝔻iscord"
+bindsym $mod+Ctrl+b exec --no-startup-id $HOME/.i3/scripts/browsers.sh
 
-mode $browser_menu {
-	bindsym f exec firefox; mode default
-	bindsym Shift+f exec firefox --private; mode default
-	bindsym $mod+f exec firefox; mode default
-	bindsym $mod+Shift+f exec firefox --private; mode default
-
-	bindsym c exec chromium-browser; mode default
-	bindsym Shift+c exec chromium-browser --incognito; mode default
-	bindsym $mod+c exec chromium-browser; mode default
-	bindsym $mod+Shift+c exec chromium-browser --incognito; mode default
-
-	bindsym m exec chromium-browser --profile-directory="Profile 2" https://messenger.com; mode default
-	bindsym s exec chromium-browser --profile-directory="Profile 1" https://steamcommunity.com/chat; mode default
-	bindsym d exec chromium-browser --profile-directory="Profile 3" https://discordapp.com/channels/@me; mode default
-
-	bindsym Return mode default
-	bindsym Escape mode default
-}
+# mode $browser_menu {
+	# bindsym f exec firefox; mode default
+	# bindsym Shift+f exec firefox --private; mode default
+	# bindsym $mod+f exec firefox; mode default
+	# bindsym $mod+Shift+f exec firefox --private; mode default
+#
+	# bindsym s exec chromium-browser --profile-directory="Profile 1" https://steamcommunity.com/chat; mode default
+	# bindsym m exec chromium-browser --profile-directory="Profile 2" https://messenger.com; mode default
+	# bindsym d exec chromium-browser --profile-directory="Profile 3" https://discordapp.com/channels/@me; mode default
+	# bindsym g exec chromium-browser --profile-directory="Profile 4" https://mail.google.com; mode default
+#
+	# bindsym Return mode default
+	# bindsym Escape mode default
+# }
 
 #################### Resizing ####################
 
@@ -172,19 +174,7 @@ mode $resize_menu {
 
 ################### Power Menu ###################
 
-set $power_menu "POWER:     𝕊uspend   𝕃ogout   ℝeboot   ℙower off"
-bindsym $mod+Shift+e mode $power_menu
-
-mode $power_menu {
-	bindsym l exit
-	bindsym s exec systemctl suspend
-	bindsym r exec systemctl reboot
-	bindsym p exec systemctl poweroff
-
-	bindsym Return mode default
-	bindsym Escape mode default
-}
-
+bindsym $mod+Shift+e exec --no-startup-id $HOME/.i3/scripts/power_control.sh
 
 ################ Brightness Menu #################
 
@@ -217,7 +207,7 @@ mode $brightness_menu {
 set $cts    #000000a0
 set $cwhite #EEEEEC
 set $cblue  #6193CF
-set $cred   #F29B68
+set $cred   #a20B03
 
 bar {
 	i3bar_command i3bar -t
@@ -243,6 +233,6 @@ bar {
 ############################## Startup Processes ###############################
 
 exec --no-startup-id compton -b --config $HOME/.i3/compton.conf
-exec_always --no-startup-id feh --bg-fill $HOME/.i3/bg.png
+exec_always --no-startup-id $HOME/.i3/scripts/random_bg.sh
 exec --no-startup-id /usr/bin/gnome-settings-daemon
 exec --no-startup-id nm-applet

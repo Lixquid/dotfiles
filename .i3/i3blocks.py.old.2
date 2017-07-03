@@ -5,21 +5,14 @@
 import os
 import sys
 import subprocess
-import time
 
 ################################# Environment ##################################
 
-BLOCK_NAME = os.environ[ "BLOCK_NAME" ] \
-    if "BLOCK_NAME" in os.environ \
-    else "MISSING_BLOCK_NAME"
-BLOCK_INSTANCE = os.environ[ "BLOCK_INSTANCE" ] \
-    if "BLOCK_INSTANCE" in os.environ \
-    else ""
-BLOCK_BUTTON = os.environ[ "BLOCK_BUTTON" ] \
-    if "BLOCK_BUTTON" in os.environ \
-    else "0"
+BLOCK_NAME = os.environ[ "BLOCK_NAME" ]
+BLOCK_INSTANCE = os.environ[ "BLOCK_INSTANCE" ]
+BLOCK_BUTTON = os.environ[ "BLOCK_BUTTON" ]
 
-CLICK = BLOCK_BUTTON and ( BLOCK_BUTTON in ( "1", "2", "3" ) )
+CLICK = BLOCK_BUTTON and ( BLOCK_BUTTON in [ "1", "2", "3" ] )
 CLICK_LEFT = BLOCK_BUTTON == "1"
 CLICK_MIDDLE = BLOCK_BUTTON == "2"
 CLICK_RIGHT = BLOCK_BUTTON == "3"
@@ -28,17 +21,13 @@ SCROLL_DOWN = BLOCK_BUTTON == "5"
 
 ################################### Utility ####################################
 
+MISSING = object()
+
 def call( *args ):
     return subprocess.run( args,
         stdout = subprocess.PIPE,
         shell = True
     ).stdout.decode( "ascii" ).split( '\n', 1 )[0]
-
-def call_multi( *args ):
-    return subprocess.run( args,
-        stdout = subprocess.PIPE,
-        shell = True
-    ).stdout.decode( "utf8" )
 
 def color_str( color_or_r, g = None, b = None ):
     if g is None:
@@ -74,14 +63,15 @@ def color_fade( x, steps ):
                     ( x - si[0] ) / ( s[0] - si[0] )
                 )
 
-def print_output( icon, text = None, color = None, crit = False ):
-    if text:
+
+def print_output( icon, text = MISSING, color = MISSING, crit = False ):
+    if text is not MISSING:
         t = "  %s  %s " % ( icon, text )
     else:
         t = "  %s  " % icon
     print( t )
     print( t )
-    if color:
+    if color is not MISSING:
         if type( color ) is str:
             print( color )
         else:
@@ -91,25 +81,6 @@ def print_output( icon, text = None, color = None, crit = False ):
         sys.exit( 33 )
     else:
         sys.exit( 0 )
-
-def ticker_string( text, width = 30, speed = 2 ):
-
-    lentxt = len( text )
-    sample = text + "   ///   " + text
-
-    if lentxt <= width:
-        return text
-
-    offset = int( time.time() * speed ) % ( lentxt + 9 )
-
-    return sample[offset:(offset+width)]
-
-block_mapping = {}
-def block_name( name ):
-    def block_decorator( fn ):
-        block_mapping[ name ] = fn
-        return fn
-    return block_decorator
 
 ################################### Colours ####################################
 
@@ -125,10 +96,7 @@ C_RED = ( 235, 60, 50 )
 VOL_MUTED = "\uF026"
 VOL_LOW = "\uF027"
 VOL_HIGH = "\uF028"
-
-@block_name( "volume" )
-def get_volume():
-
+def GET_VOLUME():
     if CLICK_LEFT:
         call( "pactl set-sink-mute 0 toggle" )
     elif SCROLL_UP:
@@ -154,27 +122,6 @@ def get_volume():
         else:
             print_output( VOL_HIGH, vol )
 
-################################### Locking ####################################
-
-LOCK = "\uF023"
-UNLOCK = "\uF09C"
-
-@block_name( "lock" )
-def get_lock():
-
-    locking = call_multi(
-        "ps -aux | grep 'gnome-screensaver'"
-    ).count( '\n' ) > 2
-
-    if CLICK:
-        if locking:
-            call( "killall gnome-screensaver" )
-        else:
-            call( "gnome-screensaver-command -l" )
-        locking = not locking
-
-    print_output( LOCK if locking else UNLOCK )
-
 ################################### Battery ####################################
 
 BAT_0 = "\uF244"
@@ -183,10 +130,7 @@ BAT_2 = "\uF242"
 BAT_3 = "\uF241"
 BAT_4 = "\uF240"
 BAT_CHARGING = "\uF0E7"
-
-@block_name( "battery" )
-def get_battery():
-
+def GET_BATTERY():
     if CLICK:
         call( """
             notify-send "$( acpi -b )"
@@ -231,22 +175,17 @@ def get_battery():
 
 WIFI_ICON = "\uF1EB"
 
-@block_name( "wireless" )
-def get_wireless():
-
-    if not "wlp" in call_multi( "ifconfig -s" ):
-        sys.exit( 0 )
-        return
+def GET_WIRELESS():
 
     name = call( "iwgetid -r" )
 
     if len( name ) == 0:
-        print_output( WIFI_ICON, None, C_RED )
+        print_output( WIFI_ICON, MISSING, C_RED )
         sys.exit( 0 )
         return
 
     id = call( "iwgetid -a | cut -f 1 -d ' '" )
-    strength = round( int( float(
+    strength = int( int( float(
         call( "grep '%s' /proc/net/wireless" % id ).split()[2]
     ) ) * 100 / 70 )
 
@@ -256,18 +195,15 @@ def get_wireless():
         ( 65, C_WHITE )
     ] )
 
-    text = "%s (%s%%)" % ( name, strength )
-
-    print_output( WIFI_ICON, ticker_string( text ), color )
+    print_output( WIFI_ICON, "%s (%s%%)" % ( name, strength ), color )
 
 ##################################### CPU ######################################
 
 CPU_ICON = "\uF2DB"
 
-@block_name( "cpu" )
-def get_cpu():
+def GET_CPU():
 
-    cpu = 100 - round( float(
+    cpu = 100 - int( float(
         call( "mpstat 1 1 | grep Average" ).split()[11]
     ) )
 
@@ -287,10 +223,9 @@ TEMP_2 = "\uF2C9"
 TEMP_3 = "\uF2C8"
 TEMP_4 = "\uF2C7"
 
-@block_name( "temperature" )
-def get_temp():
+def GET_TEMP():
 
-    temp = round( float( call(
+    temp = int( float( call(
         "cat /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input"
     ) ) / 1000 )
 
@@ -316,74 +251,32 @@ def get_temp():
 
 BRIGHTNESS_ICON = "\uF185"
 
-@block_name( "brightness" )
-def get_brightness():
+def GET_BRIGHTNESS():
 
     if SCROLL_UP:
         call( "xbacklight -inc 5 -time 5" )
     elif SCROLL_DOWN:
         call( "xbacklight -dec 5 -time 5" )
 
-    value = round( float( call( "xbacklight -get" ) ) )
+    value = int( float( call( "xbacklight -get" ) ) )
     print_output( BRIGHTNESS_ICON, str( value ) + "%" )
 
 ##################################### Time #####################################
 
 TIME_ICON = "\uF017"
 
-@block_name( "time" )
-def get_time():
+def GET_TIME():
 
     if CLICK:
         call( """
             notify-send "$( date -R )"
         """ )
-    if CLICK_RIGHT:
-        call( """
-            notify-send "$( cal -h )"
-        """ )
 
     value = call( "date +'%H:%M'" )
     print_output( TIME_ICON, value )
 
-#################################### Audio #####################################
-
-AUDIO_ICON = "\uF04B"
-AUDIO_PAUSED_ICON = "\uf04c"
-
-@block_name( "audio" )
-def get_audio():
-
-    raw = call_multi( "$HOME/.i3/scripts/audio_control.sh GetRaw" )
-
-    titleLine = None
-    artistLine = None
-    titleOut = None
-    artistOut = None
-
-    for i, line in enumerate( raw.split( "\n" ) ):
-        if "xesam:title" in line:
-            titleLine = i + 1
-        if "xesam:artist" in line:
-            artistLine = i + 2
-        if titleLine == i:
-            titleOut = '"'.join( line.split('"')[1:-1] )
-        if artistLine == i:
-            artistOut = '"'.join( line.split('"')[1:-1] )
-
-    icon = AUDIO_ICON
-    if "Paused" in call( "$HOME/.i3/scripts/audio_control.sh GetPaused" ):
-        icon = AUDIO_PAUSED_ICON
-
-    if titleOut and artistOut:
-        print_output( icon,
-            ticker_string( titleOut + " -by- " + artistOut, 60 ) )
-
 ################################## Endpoints ###################################
 
 if __name__ == "__main__":
-
-    if BLOCK_NAME in block_mapping:
-        block_mapping[ BLOCK_NAME ]()
-    else:
-        print_output( "Block %s not found!" % BLOCK_NAME, color = C_RED )
+    command = sys.argv[1]
+    locals()[ command ]()

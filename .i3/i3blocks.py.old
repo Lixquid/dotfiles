@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+
+################################### Imports ####################################
+
+import sys
+import subprocess
+
+################################### Utility ####################################
+
+def call( *args ):
+    return subprocess.run( args,
+        stdout = subprocess.PIPE,
+        shell = True
+    ).stdout.decode( "ascii" ).split( '\n', 1 )[0]
+
+def color_int( r1, g1, b1, r2, g2, b2, x ):
+    return color_str(
+        r1 + ( r2 - r1 ) * x,
+        g1 + ( g2 - g1 ) * x,
+        b1 + ( b2 - b1 ) * x
+    )
+
+def color_str( r, g, b ):
+    r = int( r )
+    g = int( g )
+    b = int( b )
+    return '#' + \
+        hex( r )[2:].zfill(2) + \
+        hex( g )[2:].zfill(2) + \
+        hex( b )[2:].zfill(2)
+
+def color_fade( x, steps ):
+    for i, s in enumerate( steps ):
+        if x >= s[0] and i + 1 == len( steps ):
+            return color_str( s[1], s[2], s[3] )
+        if x < s[0]:
+            if i == 0:
+                return color_str( s[1], s[2], s[3] )
+            else:
+                si = steps[i-1]
+                return color_int(
+                    si[1], si[2], si[3],
+                    s[1], s[2], s[3],
+                    ( x - si[0] ) / ( s[0] - si[0] )
+                )
+
+def get_volume():
+    return call( """
+        amixer -D pulse get Master |
+        grep -o '\[[0-9]*%\]' |
+        sed 's/\[\([0-9]*\)%\]/\\1/'
+    """ )
+
+def get_muted():
+    return call( """
+        amixer -D pulse get Master |
+        grep -o '\[off\]'
+    """ ) == '[off]'
+
+# Battery 0: Charging, 92%, 00:17:11 until charged
+# Battery 0: Full, 100%
+# Battery 0: Discharging, 96%, 05:23:04 remaining
+# Battery 0: Unknown, 96%, rate information unavailable
+def get_battery():
+    out = call( "acpi -b" )
+    val = int( call( """
+        acpi -b |
+        sed 's/.*, \([0-9]*\)%.*/\\1/'
+    """ ) )
+
+    return {
+        'full': "Full" in out,
+        'charging': "Charging" in out,
+        'discharging': "Discharging" in out,
+        'val': val
+    }
+
+################################## Endpoints ###################################
+
+VOL_MUTED = ''
+VOL_LOW = ''
+VOL_HIGH = ''
+def e_get_volume():
+    if get_muted():
+        print( "  %s  Muted " % VOL_MUTED )
+        print()
+        print( "#fca49d" )
+    else:
+        vol = int( get_volume() )
+        if vol < 40:
+            print( "  %s  %s " % ( VOL_LOW, vol ) )
+        else:
+            print( "  %s  %s " % ( VOL_HIGH, vol ) )
+
+BATTERY_0=''
+BATTERY_1=''
+BATTERY_2=''
+BATTERY_3=''
+BATTERY_4=''
+BATTERY_C=''
+CHARGE=''
+def e_get_battery():
+    out = get_battery()
+
+    if out["full"]:
+        print( "  %s  Full " % ( BATTERY_4 + " " + CHARGE ) )
+        print()
+        print( "#B1D28F" )
+    else:
+
+        val = out["val"]
+
+        s = BATTERY_4
+        if val < 20:
+            s = BATTERY_0
+        elif val < 40:
+            s = BATTERY_1
+        elif val < 60:
+            s = BATTERY_2
+        elif val < 80:
+            s = BATTERY_3
+
+        if out[ "charging" ]:
+            s = s + " " + CHARGE
+
+        print( "  %s  %s%% " % ( s, val ) )
+        print()
+
+        if out["charging"]:
+            print( "#99DCC6" )
+        else:
+            print( color_fade( val, [
+                [ 15, 235, 60, 50 ],
+                [ 30, 238, 230, 127 ],
+                [ 50, 238, 238, 238 ]
+            ] ) )
+
+        if val < 10:
+            sys.exit( 33 )
+
+def e_get_wireless():
+    network_name = call( "iwgetid -r" )
+    if len( network_name ) == 0:
+        return sys.exit( 1 )
+
+    network_id = call( "iwgetid -a | cut -f 1 -d ' '" )
+    network_str = int( int( float(
+        call( "grep %s /proc/net/wireless" % network_id ).split()[2]
+    ) ) * 100 / 70 )
+
+    print( "  %s (%s%%) " % ( network_name, network_str ) )
+    print()
+
+    print( color_fade( network_str, [
+        [ 35, 235, 60, 50 ],
+        [ 50, 238, 230, 127 ],
+        [ 65, 238, 238, 238 ]
+    ] ) )
+
+def e_get_cpu():
+    cpu = 100 - int( float( call( "mpstat 1 1 | grep Average" ).split()[11] ) )
+    print( "  %s%% " % cpu )
+    print()
+
+    print( color_fade( cpu, [
+        [ 30, 238, 238, 238 ],
+        [ 60, 238, 230, 127 ],
+        [ 80, 235, 60, 50 ]
+    ] ) )
+
+    if cpu > 80:
+        sys.exit( 33 )
+
+TEMP_0 = ''
+TEMP_1 = ''
+TEMP_2 = ''
+TEMP_3 = ''
+TEMP_4 = ''
+def e_get_temp():
+    temp = int( float( call( "acpi -t" ).split(",")[1].split()[0] ) )
+    temp = int( float( call(
+        "cat /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input"
+    ) ) / 1000 )
+
+    s = TEMP_4
+    if temp < 30:
+        s = TEMP_0
+    elif temp < 50:
+        s = TEMP_1
+    elif temp < 70:
+        s = TEMP_2
+    elif temp < 90:
+        s = TEMP_3
+
+    print( " %s  %s°C " % ( s, temp ) )
+    print()
+
+    print( color_fade( temp, [
+        [ 40, 238, 238, 238 ],
+        [ 90, 235, 60, 50 ]
+    ] ) )
+
+    if temp >= 90:
+        sys.exit( 33 )
+
+################################# Main Switch ##################################
+
+if __name__ == '__main__':
+    # try:
+        command = sys.argv[1]
+
+        if command == 'get_volume':
+            e_get_volume()
+        elif command == 'get_battery':
+            e_get_battery()
+        elif command == 'get_wireless':
+            e_get_wireless()
+        elif command == 'get_cpu':
+            e_get_cpu()
+        elif command == 'get_temp':
+            e_get_temp()
+        else:
+            pass
+    # except:
+        # pass

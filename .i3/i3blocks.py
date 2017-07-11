@@ -294,20 +294,20 @@ def get_temp():
         "cat /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input"
     ) ) / 1000 )
 
-    if temp < 20:
+    if temp < 40:
         icon = TEMP_0
-    elif temp < 40:
-        icon = TEMP_1
     elif temp < 60:
+        icon = TEMP_1
+    elif temp < 75:
         icon = TEMP_2
-    elif temp < 80:
+    elif temp < 90:
         icon = TEMP_3
     else:
         icon = TEMP_4
 
     color = color_fade( temp, [
-        ( 40, C_WHITE ),
-        ( 90, C_RED )
+        ( 75, C_WHITE ),
+        ( 100, C_RED )
     ] )
 
     print_output( icon, str( temp ) + "\u00B0C", color, temp >= 90 )

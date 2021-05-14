@@ -8,3 +8,5 @@ if ($module) {
     Import-Module $module
     Set-Theme Agnoster
 }
+
+. $HOME/.dotfiles/powershell/ProfileFunctions.ps1

@@ -5,6 +5,8 @@
 # Resolve all references to my git DNS to instead point to my github
 [url "https://github.com/lixquid"]
     insteadOf = "https://git.lixquid.com"
+[url "git@github.com:lixquid/"]
+    insteadOf = "git@git.lixquid.com:"
 
 [alias]
     # Amends the previous commit, staging everything if nothing is staged

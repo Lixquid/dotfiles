@@ -74,3 +74,47 @@ function tinypng {
         }
     }
 }
+
+function New-GitIgnore {
+    <#
+    .SYNOPSIS
+        Creates a new gitignore file from the github gitignore template
+        repository.
+    .PARAMETER Type
+        Mandatory.
+
+        The type of gitignore to create.
+    #>
+    param (
+        [Parameter(Mandatory)]
+        [ValidateSet(
+            IgnoreCase = $false,
+            "Actionscript", "Ada", "Agda", "Android", "AppceleratorTitanium",
+            "AppEngine", "ArchLinuxPackages", "Autotools", "C", "C++",
+            "CakePHP", "CFWheels", "ChefCookbook", "Clojure", "CMake",
+            "CodeIgniter", "CommonLisp", "Composer", "Concrete5", "Coq",
+            "CraftCMS", "CUDA", "D", "Dart", "Delphi", "DM", "Drupal", "Eagle",
+            "Elisp", "Elixir", "Elm", "EPiServer", "Erlang", "ExpressionEngine",
+            "ExtJs", "Fancy", "Finale", "ForceDotCom", "Fortran", "FuelPHP",
+            "Gcov", "GitBook", "Go", "Godot", "Gradle", "Grails", "GWT",
+            "Haskell", "Idris", "IGORPro", "Java", "JBoss", "Jekyll",
+            "JENKINS_HOME", "Joomla", "Julia", "KiCad", "Kohana", "Kotlin",
+            "LabVIEW", "Laravel", "Leiningen", "LemonStand", "Lilypond",
+            "Lithium", "Lua", "Magento", "Maven", "Mercury",
+            "MetaProgrammingSystem", "Nanoc", "Nim", "Node", "Objective-C",
+            "OCaml", "Opa", "OpenCart", "OracleForms", "Packer", "Perl",
+            "Phalcon", "PlayFramework", "Plone", "Prestashop", "Processing",
+            "PureScript", "Python", "Qooxdoo", "Qt", "R", "Rails", "Raku",
+            "RhodesRhomobile", "ROS", "Ruby", "Rust", "Sass", "Scala", "Scheme",
+            "SCons", "Scrivener", "Sdcc", "SeamGen", "SketchUp", "Smalltalk",
+            "Stella", "SugarCRM", "Swift", "Symfony", "SymphonyCMS",
+            "Terraform", "TeX", "Textpattern", "TurboGears2", "TwinCAT3",
+            "Typo3", "Umbraco", "Unity", "UnrealEngine", "VisualStudio", "VVVV",
+            "Waf", "WordPress", "Xojo", "Yeoman", "Yii", "ZendFramework",
+            "Zephir"
+        )]
+        [string] $Type
+    )
+
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/github/gitignore/master/$Type.gitignore" -OutFile .gitignore
+}

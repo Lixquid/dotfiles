@@ -118,3 +118,34 @@ function New-GitIgnore {
 
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/github/gitignore/master/$Type.gitignore" -OutFile .gitignore
 }
+
+function Use-Env {
+    <#
+    .SYNOPSIS
+        Sets environment variables for a single script block, then resets them.
+    .PARAMETER Variables
+        Mandatory.
+
+        The environment variables to temporarily set.
+    .PARAMETER ScriptBlock
+        Mandatory.
+
+        The ScriptBlock to run with the modified environment variables.
+    #>
+    param (
+        [Parameter(Mandatory)]
+        [hashtable] $Variables,
+
+        [Parameter(Mandatory)]
+        [scriptblock] $ScriptBlock
+    )
+
+    $previousVariables = Get-ChildItem Env:
+    foreach ($nv in $Variables.GetEnumerator()) {
+        Set-Item -Path (Join-Path Env: $nv.Name) -Value $nv.Value
+    }
+    Invoke-Command $ScriptBlock
+    foreach ($nv in $previousVariables.GetEnumerator()) {
+        Set-Item -Path (Join-Path Env: $nv.Name) -Value $nv.Value
+    }
+}

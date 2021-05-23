@@ -1,5 +1,6 @@
 Invoke-Command {
 
+    ## Modules #################################################################
     $module = Get-Module posh-git -ListAvailable
     if ($module) {
         Import-Module $module
@@ -13,4 +14,13 @@ Invoke-Command {
 
 }
 
+## Utility #####################################################################
 . $HOME/.dotfiles/powershell/ProfileFunctions.ps1
+
+## Aliases #####################################################################
+Set-Alias ue Use-Env
+function .. { Set-Location .. }
+function ... { Set-Location ../.. }
+function .... { Set-Location ../../.. }
+function ..... { Set-Location ../../../.. }
+function ...... { Set-Location ../../../../.. }

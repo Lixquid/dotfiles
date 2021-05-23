@@ -31,3 +31,8 @@ Invoke-Command {
 
 ## Aliases #####################################################################
 Set-Alias ue Use-Env
+function .. { Set-Location .. }
+function ... { Set-Location ../.. }
+function .... { Set-Location ../../.. }
+function ..... { Set-Location ../../../.. }
+function ...... { Set-Location ../../../../.. }

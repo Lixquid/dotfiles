@@ -131,6 +131,10 @@ function Use-Env {
         Mandatory.
 
         The ScriptBlock to run with the modified environment variables.
+    .EXAMPLE
+        Write-Output $env:hello # HELLO
+        Use-Env @{hello = 5} { Write-Output $env:hello } # 5
+        Write-Output $env:hello # HELLO
     #>
     param (
         [Parameter(Mandatory)]

@@ -1,11 +1,11 @@
-$module = Get-Module posh-git -ListAvailable
-if ($module) {
-    Import-Module $module
+$private:module = Get-Module posh-git -ListAvailable
+if ($private:module) {
+    Import-Module $private:module
 }
 
-$module = Get-Module oh-my-posh -ListAvailable
-if ($module) {
-    Import-Module $module
+$private:module = Get-Module oh-my-posh -ListAvailable
+if ($private:module) {
+    Import-Module $private:module
     Set-Theme Agnoster
 }
 

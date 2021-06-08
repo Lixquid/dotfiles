@@ -14,6 +14,10 @@ Invoke-Command {
 
 }
 
+## Settings ####################################################################
+# Ctrl-D will exit the terminal
+Set-PSReadlineKeyHandler -Key ctrl+d -Function ViExit -ErrorAction SilentlyContinue
+
 ## Utility #####################################################################
 . $HOME/.dotfiles/powershell/ProfileFunctions.ps1
 

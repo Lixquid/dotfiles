@@ -1,0 +1,70 @@
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+"" Map \r to the Reformat Code action
+"map \r <Action>(ReformatCode)
+
+"" Map <leader>d to start debug
+"map <leader>d <Action>(Debug)
+
+"" Map \b to toggle the breakpoint on the current line
+"map \b <Action>(ToggleLineBreakpoint)
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" [Plugin]
+" Provides actions for manipulating brace pairs.
+"
+" ys<Motion><Brace> - Add braces around <Motion>
+" cs<Brace><Brace>  - Change surrounding braces into something different
+" ds<Brace>         - Delete surrounding braces
+" <Visual>S<Brace>  - Add braces around visual selection
+set surround
+
+" [Plugin]
+" Provides actions for replacing text with the contents of registers.
+" If no register is provided, defaults to unnamed register.
+"
+" ["x]gr<Motion> - Replace <Motion> text with contents of register x.
+" [count]["x]grr - Replace [count] lines of text with the contents of register
+"                  x.
+" <Visual>["x]gr - Replace the visual selection with the contents of register x.
+set ReplaceWithRegister
+
+" [Plugin]
+" Provides text objects for arguments. For example:
+" (hell|o(world, all), foo) <== dia
+" (|, foo)
+"
+" ia - Inside Argument; doesn't include argument delimiter
+" aa - Around Argument; includes argument delimiter and space
+set argtextobj
+" Extends argument delimiters to include these brackets
+let g:argtextobj_pairs="(:),[:],<:>"
+
+" [Plugin]
+" Provides text objects for the entire buffer.
+"
+" ae - Around Everything: The entire buffer
+" ie - Inside Everything: The entire buffer except leading/trailing whitespace
+set textobj-entire
+
+" [Plugin]
+" Provides text objects for indentation delimited blocks of text.
+"
+" ii - Text on indentation level
+" ai - Text on indentation level and line above
+" aI - Text on indentation level and line above/below
+set textobj-indent
+
+" [Plugin]
+" Displays all matching searches started with /, instead of only the first one.
+set incsearch
+
+" [IDEAVim Specific]
+" Overrides the default J (Join) command to instead use the editor's built in
+" joining mechanism.
+" For example:
+" 'hello ' +
+"     'world'
+" will join to:
+" 'hello world'
+set ideajoin

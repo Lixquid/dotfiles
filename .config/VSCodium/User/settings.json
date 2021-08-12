@@ -1,0 +1,109 @@
+{
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "css.lint.compatibleVendorPrefixes": "warning",
+    "css.lint.duplicateProperties": "warning",
+    "css.lint.zeroUnits": "warning",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "editor.copyWithSyntaxHighlighting": false,
+    "editor.cursorStyle": "line",
+    "editor.definitionLinkOpensInPeek": true,
+    "editor.fontFamily": "'Fira Code', monospace",
+    "editor.fontLigatures": "'ss03', 'ss06'",
+    "editor.formatOnSave": true,
+    "editor.lineNumbers": "on",
+    "editor.minimap.renderCharacters": false,
+    "editor.parameterHints.cycle": true,
+    "editor.renderControlCharacters": true,
+    "editor.renderLineHighlight": "all",
+    "editor.renderWhitespace": "boundary",
+    "editor.rulers": [80, 120],
+    "editor.smoothScrolling": true,
+    "editor.snippetSuggestions": "none",
+    "editor.suggest.showStatusBar": true,
+    "editor.trimAutoWhitespace": false,
+    "editor.wordWrap": "off",
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": true,
+    "files.associations": {
+        "*.as": "c"
+    },
+    "files.autoGuessEncoding": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "git.allowForcePush": true,
+    "git.enableSmartCommit": true,
+    "git.enableStatusBarSync": false,
+    "git.supportCancellation": true,
+    "html.format.endWithNewline": true,
+    "languageStylus.useSeparator": false,
+    "less.lint.compatibleVendorPrefixes": "warning",
+    "less.lint.duplicateProperties": "warning",
+    "less.lint.zeroUnits": "warning",
+    "npm.packageManager": "yarn",
+    "prettier.arrowParens": "avoid",
+    "prettier.printWidth": 120,
+    "prettier.tabWidth": 4,
+    "scm.countBadge": "focused",
+    "scss.lint.compatibleVendorPrefixes": "warning",
+    "scss.lint.duplicateProperties": "warning",
+    "scss.lint.zeroUnits": "warning",
+    "search.showLineNumbers": true,
+    "search.smartCase": true,
+    "stylusSupremacy.alwaysUseNoneOverZero": true,
+    "stylusSupremacy.alwaysUseZeroWithoutUnit": true,
+    "stylusSupremacy.insertBraces": false,
+    "stylusSupremacy.insertColons": false,
+    "stylusSupremacy.insertParenthesisAroundIfCondition": false,
+    "stylusSupremacy.insertSemicolons": false,
+    "stylusSupremacy.quoteChar": "\"",
+    "stylusSupremacy.reduceMarginAndPaddingValues": true,
+    "stylusSupremacy.selectorSeparator": ",\n",
+    "stylusSupremacy.sortProperties": "grouped",
+    "telemetry.enableCrashReporter": false,
+    "telemetry.enableTelemetry": false,
+    "terminal.integrated.defaultLocation": "editor",
+    "terminal.integrated.tabs.enabled": true,
+    "vim.highlightedyank.enable": true,
+    "vim.insertModeKeyBindingsNonRecursive": [
+        {
+            "after": ["<Esc>"],
+            "before": ["j", "j"]
+        }
+    ],
+    "vim.useCtrlKeys": false,
+    "workbench.colorTheme": "GitHub Dark",
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.editor.untitled.hint": "hidden",
+    "workbench.editor.untitled.labelFormat": "name",
+    "workbench.enableExperiments": false,
+    "workbench.list.horizontalScrolling": true,
+    "workbench.list.smoothScrolling": true,
+    "workbench.settings.enableNaturalLanguageSearch": false,
+    "workbench.tips.enabled": false,
+    "workbench.tree.indent": 24,
+    "workbench.tree.renderIndentGuides": "always"
+}

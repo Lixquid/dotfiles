@@ -1,0 +1,86 @@
+general {
+    interval = 1
+
+    colors = true
+    color_good = "#859900"
+    color_degraded = "#b58900"
+    color_bad = "#dc322f"
+}
+
+order += "wireless _first_"
+order += "read_file brightness"
+order += "read_file max_brightness"
+order += "volume master"
+order += "disk /"
+order += "cpu_usage"
+order += "load"
+order += "cpu_temperature 0"
+order += "memory"
+order += "battery 0"
+order += "tztime local"
+
+wireless _first_ {
+    format_up = " %essid (%quality)"
+    format_down = ""
+}
+
+read_file brightness {
+    format = " %content"
+    path = "/sys/class/backlight/intel_backlight/brightness"
+    separator = false
+}
+
+read_file max_brightness {
+    format = "/ %content"
+    path = "/sys/class/backlight/intel_backlight/max_brightness"
+}
+
+volume master {
+    format = " %volume"
+    format_muted = " %volume"
+    device = "pulse"
+}
+
+disk "/" {
+    format = " %avail"
+    prefix_type = custom
+    low_threshold = 20
+    threshold_type = percentage_avail
+}
+
+cpu_usage {
+    format = " %usage"
+}
+
+load {
+    format = "%1min"
+}
+
+cpu_temperature 0 {
+    format = "%degrees°C"
+}
+
+memory {
+    format = " %percentage_used + %percentage_shared"
+    threshold_degraded = 10%
+    threshold_critical = 5%
+}
+
+battery 0 {
+    format = "%status %percentage %remaining"
+
+    last_full_capacity = true
+    integer_battery_capacity = true
+    low_threshold = 15
+    threshold_type = percentage
+    hide_seconds = true
+
+    status_chr = ""
+    status_bat = ""
+    status_unk = ""
+    status_full = ""
+}
+
+tztime local {
+    format = "%A, %e %B %H:%M:%S"
+}

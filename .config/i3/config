@@ -1,8 +1,9 @@
 ## General #####################################################################
 
-font pango:Fira Code 10
+font pango:Fira Code, Font Awesome 10
 
 set $mod Mod4
+set $config_root ~/.config/i3
 
 set $ws1 1
 set $ws2 2
@@ -77,17 +78,29 @@ bindsym $mod+b          exec firefox
 bindsym $mod+Shift+b    exec firefox --private-window
 bindsym $mod+n          exec thunar
 
+# Quickterm; open a terminal, use $mod+Shift+Tab, then $mod+Tab to toggle it
+bindsym $mod+Tab          scratchpad show
+bindsym $mod+Shift+Tab    \
+    floating enable, \
+    sticky enable, \
+    border pixel 1, \
+    move position 0 px 22 px, \
+    resize set 100 ppt 20 ppt, \
+    move scratchpad, \
+    scratchpad show
+
+# Media keys
 set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s +10%
-bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl -n s 10%-
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s +10% && $refresh_i3status
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl -n s 10%- && $refresh_i3status
 
 ## Resizing ####################################################################
 
-set $resize_menu "RESIZING:    [<] Shrink  [>] Grow  [v] Grow  [^] Shrink"
+set $resize_menu "RESIZING:    [⯇] Shrink  [⯈] Grow  [⯆] Grow  [⯅] Shrink"
 bindsym $mod+r    mode $resize_menu
 
 mode $resize_menu {
@@ -119,9 +132,19 @@ mode $power_menu {
     bindsym Escape    mode default
 }
 
+## Quick Menu ##################################################################
+
+bindsym $mod+u    exec $config_root/quick_menu.sh
+
 ## Status Bar ##################################################################
 
 bar {
     status_command i3status
     position top
+
+    colors {
+        background #002b36
+        statusline #eee8d5
+        separator #586e75
+    }
 }

@@ -36,3 +36,5 @@ function ... { Set-Location ../.. }
 function .... { Set-Location ../../.. }
 function ..... { Set-Location ../../../.. }
 function ...... { Set-Location ../../../../.. }
+
+function vinix { sudo vim /etc/nixos/configuration.nix }

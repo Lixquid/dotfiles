@@ -1,6 +1,6 @@
 ## General #####################################################################
 
-font pango:Fira Code, Font Awesome 10
+font pango:Fira Code, Font Awesome 12
 
 set $mod Mod4
 set $config_root ~/.config/i3
@@ -84,7 +84,7 @@ bindsym $mod+Shift+Tab    \
     floating enable, \
     sticky enable, \
     border pixel 1, \
-    move position 0 px 22 px, \
+    move position 0 px 26 px, \
     resize set 100 ppt 20 ppt, \
     move scratchpad, \
     scratchpad show

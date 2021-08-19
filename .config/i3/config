@@ -139,12 +139,7 @@ bindsym $mod+u    exec $config_root/quick_menu.sh
 ## Status Bar ##################################################################
 
 bar {
-    status_command i3status
+    status_command i3status-rs
     position top
-
-    colors {
-        background #002b36
-        statusline #eee8d5
-        separator #586e75
-    }
+    tray_padding 0
 }

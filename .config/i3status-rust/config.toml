@@ -8,7 +8,9 @@ memory_mem = "\uf538"
 [[block]]
 block = "custom"
 command = ''' mullvad status | grep -oF "Connecting
-Connected" '''
+Connected
+Disconnected
+Blocked" '''
 shell = "sh"
 interval = 5
 

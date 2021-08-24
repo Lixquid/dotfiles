@@ -104,14 +104,14 @@ set $resize_menu "RESIZING:    [⯇] Shrink  [⯈] Grow  [⯆] Grow  [⯅] Shrin
 bindsym $mod+r    mode $resize_menu
 
 mode $resize_menu {
-    bindsym Up       resize shrink height 10 px or 10 ppt
+    bindsym Up       resize grow height 10 px or 10 ppt
     bindsym Right    resize grow width 10 px or 10 ppt
-    bindsym Down     resize grow height 10 px or 10 ppt
+    bindsym Down     resize shrink height 10 px or 10 ppt
     bindsym Left     resize shrink width 10 px or 10 ppt
 
-    bindsym Shift+Up       resize shrink height 1 px or 1 ppt
+    bindsym Shift+Up       resize grow height 1 px or 1 ppt
     bindsym Shift+Right    resize grow width 1 px or 1 ppt
-    bindsym Shift+Down     resize grow height 1 px or 1 ppt
+    bindsym Shift+Down     resize shrink height 1 px or 1 ppt
     bindsym Shift+Left     resize shrink width 1 px or 1 ppt
 
     bindsym Return    mode default

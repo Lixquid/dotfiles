@@ -32,3 +32,5 @@
     # Argument 1: The branch name to search for
     # Argument 2: The remote to look for. Defaults to "origin".
     swr = "!f(){ originbranch=$(git for-each-ref refs/remotes/${2:-origin} --format='%(refname:short)' --sort='-committerdate' | grep -m1 \"$1\" ); git checkout ${originbranch#*/}; }; f"
+[init]
+	defaultBranch = master

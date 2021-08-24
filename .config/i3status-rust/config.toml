@@ -15,6 +15,12 @@ shell = "sh"
 interval = 5
 
 [[block]]
+block = "custom"
+command = ''' mullvad relay get | sed "s/.*country \([a-z]*\).*/\1/" '''
+shell = "sh"
+interval = 5
+
+[[block]]
 block = "net"
 format = "{ssid} {signal_strength} {speed_down;K*b} {speed_up;K*b}"
 interval = 1

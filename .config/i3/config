@@ -144,3 +144,7 @@ bar {
     position top
     tray_padding 0
 }
+
+## Startup Commands ############################################################
+
+exec_always --no-startup-id exec xss-lock i3lock

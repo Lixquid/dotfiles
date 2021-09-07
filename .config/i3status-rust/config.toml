@@ -5,6 +5,18 @@ name = "awesome"
 cpu = "\uf2db"
 memory_mem = "\uf538"
 
+# Disable keyboard toggle
+[[block]]
+block = "custom"
+json = true
+cycle = [
+    ''' xinput enable 'AT Translated Set 2 keyboard' && echo '{"text": "\uf11c"}' ''',
+    ''' xinput disable 'AT Translated Set 2 keyboard' && echo  '{"text": "\uf05e", "state": "Critical"}' ''',
+]
+interval = "once"
+shell = "sh"
+
+# Mullvad status
 [[block]]
 block = "custom"
 command = ''' mullvad status | grep -oF "Connecting
@@ -14,6 +26,7 @@ Blocked" '''
 shell = "sh"
 interval = 5
 
+# Mullvad connected country
 [[block]]
 block = "custom"
 command = ''' mullvad relay get | sed "s/.*country \([a-z]*\).*/\1/" '''

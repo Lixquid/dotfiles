@@ -63,7 +63,7 @@ format = "{barchart} {utilization}"
 [[block]]
 block = "disk_space"
 path = "/"
-info_type = "used"
+info_type = "available"
 format = "{icon} {available}"
 
 # [[block]]

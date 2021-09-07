@@ -1,6 +1,6 @@
 #!/bin/sh
 
-OPT=$(dmenu -l 5 -p "Quick Menu" <<EOF
+OPT=$(dmenu -i -l 5 -p "Quick Menu" <<EOF
 Restart Mullvad Daemon
 Open Non-Mullvad Window
 Set Mullvad Relay Location
@@ -21,7 +21,7 @@ case "$OPT" in
         mullvad always-require-vpn set on
         ;;
     "Set Mullvad Relay Location")
-        OPT=$(mullvad relay list | grep "^[A-z]" |dmenu -l 5 -p "Location")
+        OPT=$(mullvad relay list | grep "^[A-z]" | dmenu -i -l 5 -p "Location")
         if [ -z "$OPT" ]; then exit; fi
         mullvad relay set location $(echo $OPT | sed "s/.*(\([a-z]*\)).*/\1/")
         ;;

@@ -105,5 +105,6 @@
     "workbench.settings.enableNaturalLanguageSearch": false,
     "workbench.tips.enabled": false,
     "workbench.tree.indent": 24,
-    "workbench.tree.renderIndentGuides": "always"
+    "workbench.tree.renderIndentGuides": "always",
+    "prettier.proseWrap": "always"
 }

@@ -21,13 +21,13 @@
         libreoffice
         maim
         mullvad-vpn
+        neovim
         nodejs
         nodePackages.yarn
         powershell
         pulseaudio
         redshift
         rustup
-        vim
         vlc
         vscodium-fhs
         xclip

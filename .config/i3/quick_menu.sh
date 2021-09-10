@@ -4,6 +4,8 @@ OPT=$(dmenu -i -l 5 -p "Quick Menu" <<EOF
 Restart Mullvad Daemon
 Open Non-Mullvad Window
 Set Mullvad Relay Location
+Disable Touchpad
+Enable Touchpad
 EOF
 )
 
@@ -24,5 +26,11 @@ case "$OPT" in
         OPT=$(mullvad relay list | grep "^[A-z]" | dmenu -i -l 5 -p "Location")
         if [ -z "$OPT" ]; then exit; fi
         mullvad relay set location $(echo $OPT | sed "s/.*(\([a-z]*\)).*/\1/")
+        ;;
+    "Disable Touchpad")
+        xinput disable 'DLL075B:01 06CB:76AD Touchpad'
+        ;;
+    "Enable Touchpad")
+        xinput enable 'DLL075B:01 06CB:76AD Touchpad'
         ;;
 esac

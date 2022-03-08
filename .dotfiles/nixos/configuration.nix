@@ -24,6 +24,7 @@
         neovim
         nodejs
         nodePackages.yarn
+        openscad
         powershell
         pulseaudio
         redshift
@@ -47,16 +48,22 @@
     ];
 
     boot.loader.systemd-boot.enable = true;
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+
+    powerManagement = {
+        enable = true;
+        powertop.enable = true;
+    };
 
     networking = {
-        hostName = "Aphrodite";
+        hostName = "Artemis";
 
         useDHCP = false;
-        interfaces.wlp58s0.useDHCP = true;
+        interfaces.wlp170s0.useDHCP = true;
 
         wireless = {
             enable = true;
-            interfaces = ["wlp58s0"];
+            interfaces = ["wlp170s0"];
             userControlled.enable = true;
             networks = {
                 # Wifi networks
@@ -68,11 +75,30 @@
         # Needed for mullvad
         firewall.checkReversePath = "loose";
         wireguard.enable = true;
+
+        firewall.allowedTCPPortRanges = [
+            { from = 65000; to = 65200; }
+        ];
+        firewall.allowedUDPPortRanges = [
+            { from = 65000; to = 65200; }
+        ];
     };
 
-    hardware.pulseaudio.enable = true;
-    hardware.logitech.wireless.enable = true;
-    hardware.logitech.wireless.enableGraphical = true;
+    hardware = {
+        pulseaudio.enable = true;
+        logitech.wireless = {
+            enable = true;
+            enableGraphical = true;
+        };
+        opengl.extraPackages = with pkgs; [
+            mesa_drivers
+            vaapiIntel
+            vaapiVdpau
+            libvdpau-va-gl
+            intel-media-driver
+        ];
+    };
+    security.pam.services.sudo.fprintAuth = true;
 
     time.timeZone = "Europe/London";
 
@@ -85,6 +111,11 @@
             libinput.enable = true;
             windowManager.i3.enable = true;
         };
+        # Fingerprint Sensor
+        fprintd.enable = true;
+        # Thermal Sensor
+        thermald.enable = true;
+
         mullvad-vpn.enable = true;
         logind.lidSwitch = "suspend";
     };

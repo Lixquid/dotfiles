@@ -24,6 +24,27 @@ Invoke-Command {
         $env:PATH = $cargo + ":" + $env:PATH
     }
 
+    ## SSH Agent ###############################################################
+    $sshAgentSocket = "/tmp/.sshAgentSocket"
+    $env:SSH_AUTH_SOCK = $sshAgentSocket
+    $sshAgent = Get-Process ssh-agent -EA SilentlyContinue
+    if (!$sshAgent) {
+        if (Test-Path $sshAgentSocket -PathType Leaf) {
+            Remove-Item $sshAgentSocket -Force
+        }
+
+        $agentProcess = Start-Process ssh-agent `
+            -ArgumentList @("-a", $sshAgentSocket) `
+            -PassThru
+
+        $env:SSH_AGENT_PID = $agentProcess.Id
+
+	echo "ID: $env:SSH_AGENT_PID SOCK: $env:SSH_AUTH_SOCK"
+        & ssh-add
+    } else {
+        $env:SSH_AGENT_PID = $sshAgent.Id
+    }
+
 }
 
 ## Utility #####################################################################
